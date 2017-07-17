@@ -147,3 +147,74 @@ The new call to `getValue()` is:
 ```cpp
 auto destination = getValue(100.f);
 ```
+
+We now want to make our code more generic. In fact, according to the type
+we pass to `getValue`, the function can call `get(int)` or `get(float)`:
+
+```cpp
+template<typename T>
+auto getValue(T param) {
+    return get(param);
+}
+```
+
+The following `getValue()` call still works correctly:
+
+```cpp
+auto destination = getValue(100.f);
+```
+
+With the function call above, the deduced type of `param` is `float`.
+So the function `float get(float)` is called.
+
+We now want to call the `int& get(int)` method. So, we simply change the parameter
+we send to `getValue()`:
+
+```cpp
+auto destination = getValue(100);
+```
+
+This code compiles but it does not have our expected behavior: the displayed
+result is `10`, because the `destination` is not a reference to `value` (as seen before).
+The only way to get a reference is to update `auto getValue(T param)` to `auto& getValue(T param)`
+and `auto destination = getValue(100)` to `auto& destination = getValue(100)`.
+
+Sadely, we cannot do it into our previous code. `getValue()` is not allowed to return
+a reference when a `float` is passed as `float get(float)` does not return a reference.
+
+This is where `decltype` appears! In contrary with `auto`, `decltype` keeps the reference
+on deduced types:
+
+```cpp
+template<typename T>
+auto getValue(T param) -> decltype(get(param)) {
+    return get(param);
+}
+```
+
+With the code above, we indicate that `getValue()` will return the type of `get(param)`
+AND applicates the `decltype` rules on the deduced type. One of these rules is to keep
+the reference on the returned type. So if `get(param)` returns a reference,
+the reference is returned as well by `getValue()`. If `get(param)` does not return
+any reference, so no reference is returned by `getValue()`.
+
+We can now write:
+
+```cpp
+auto& destination = getValue(100);
+auto other = getValue(100.f);
+destination += 5;
+std::cout << value << std::endl;
+```
+
+This code compiles and runs correctly. `destination` is a reference to `value`.
+The displayed value is `15` as expected.
+
+In C++14, it is possible to use `decltype(auto)` instead of trailing return type:
+
+```cpp
+template<typename T>
+decltype(auto) getValue(T param) {
+    return get(param);
+}
+```
