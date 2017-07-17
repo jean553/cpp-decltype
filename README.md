@@ -90,3 +90,60 @@ float get(float data) {
 Just by adding this function into our existing code, nothing changes.
 In fact, the `float get(float)` function is never called,
 as we pass an integer when we call `get(100)`.
+
+Instead of calling `int& get(int)` from `getValue()`, we now want to call `float get(float)`.
+
+We could simply update the code like that:
+
+```cpp
+auto& getValue() {
+    return get(100.f);
+}
+```
+
+It does not work. In fact, we try to returns `float&` from `getValue()`
+when the `return` statement value is a `float`.
+This is due to the following types deduction rule:
+
+```cpp
+/* the deduced type for param is a reference */
+template<typename T>
+void function(T& param);
+```
+
+The solution is to update `getValue()` to do not return a reference anymore:
+
+```cpp
+auto getValue() {
+    return get(100.f);
+}
+```
+
+Of course, we get exactly the same problem here:
+
+```cpp
+auto& destination = getValue();
+```
+
+Once again, we have to update `destination` type, which is not a reference anymore.
+
+```cpp
+auto destination = getValue();
+```
+
+We are now able to handle the `float` type. We now wanna add a parameter
+to `getValue()` in order to pass it to `get()`.
+
+So we can simply do:
+
+```cpp
+auto getValue(float param) {
+    return get(param);
+}
+```
+
+The new call to `getValue()` is:
+
+```cpp
+auto destination = getValue(100.f);
+```
