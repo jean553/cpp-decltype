@@ -5,6 +5,13 @@ Simple usage example of `decltype`.
 In general, `decltype` returns the exact `declared type` of a variable.
 `decltype` also considere the references (`lvalue reference` and `rvalue reference`).
 
+## Run the example
+
+```bash
+g++ main.cpp -o cpp-decltype
+./cpp-decltype
+```
+
 ## Simple use case
 
 ```cpp
