@@ -2,12 +2,16 @@
 
 int value {10};
 
-int& get() {
+int& get(int data) {
     return value;
 }
 
+float get(float data) {
+    return 1000.f;
+}
+
 auto& getValue() {
-    return get();
+    return get(100);
 }
 
 int main() {

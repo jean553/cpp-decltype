@@ -57,3 +57,36 @@ auto& getValue() {
 ```
 
 `value` is now equal to `15` at the end of the program.
+
+Let's now imagine we want pass parameters to our `get()` method, let's change it to:
+
+```cpp
+int& get(int data) {
+    return value;
+}
+```
+
+Note that the `data` parameter is totally useless here. The goal of the example
+is simply to update the `get()` function signature.
+
+So we can continue to call it as before, just by updating a little bit the function call:
+
+```cpp
+auto& getValue() {
+    return get(100);
+}
+```
+
+Everything still works as expected. `destination` is still a reference to `value`.
+
+We now want to add a new `get()` function, that can handle `float` type:
+
+```cpp
+float get(float data) {
+    return 1000.f;
+}
+```
+
+Just by adding this function into our existing code, nothing changes.
+In fact, the `float get(float)` function is never called,
+as we pass an integer when we call `get(100)`.
