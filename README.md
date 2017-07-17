@@ -39,3 +39,21 @@ void function(T param);
  * `getValue()` returns an `int`, so `destination` is deduced as an `int`.
 
 The value of `destination` is modified but not the value of `value`.
+
+A simple solution consist of getting `getValue()` as a reference:
+
+```cpp
+auto& destination = getValue();
+```
+
+This does not work. In fact, `getValue()` returned type is `auto` on `get()` that returns `int&`. So once again, `getValue()` returns a new value (`int`) and not a reference (`int&`).
+
+A simple way to fix it is to force `getValue()` to return a reference:
+
+```cpp
+auto& getValue() {
+    return get();
+}
+```
+
+`value` is now equal to `15` at the end of the program.

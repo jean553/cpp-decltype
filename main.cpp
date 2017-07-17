@@ -6,13 +6,13 @@ int& get() {
     return value;
 }
 
-auto getValue() {
+auto& getValue() {
     return get();
 }
 
 int main() {
 
-    auto destination = getValue();
+    auto& destination = getValue();
     destination += 5;
     std::cout << value << std::endl;
 
