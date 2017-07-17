@@ -1,5 +1,10 @@
 # cpp-decltype
 
+Simple usage example of `decltype`.
+
+In general, `decltype` returns the exact `declared type` of a variable.
+`decltype` also considere the references (`lvalue reference` and `rvalue reference`).
+
 ## Simple use case
 
 ```cpp
